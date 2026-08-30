@@ -3,7 +3,7 @@
 ## Project Scope
 - Plugin: `@goodandready-private/dsh-context-lens`
 - Architecture: DeepSeek Harness Cordis plugin + Web client
-- Canonical path: `/mnt/external/Project/DEV/dhsplugins/dsh-context-lens`
+- Base Directory: `dhsplugins/dsh-context-lens`
 
 ## Rules
 - Tests must pass: `node --test test/*.test.mjs`

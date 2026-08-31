@@ -1,7 +1,7 @@
 # AGENTS.md for dsh-context-lens
 
 ## Project Scope
-- Plugin: `@goodandready-private/dsh-context-lens`
+- Plugin: `@goodandready/dsh-context-lens`
 - Architecture: DeepSeek Harness Cordis plugin + Web client
 - Base Directory: `dhsplugins/dsh-context-lens`
 

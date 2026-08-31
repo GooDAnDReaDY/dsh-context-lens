@@ -1,6 +1,6 @@
 {
   "name": "@goodandready/dsh-context-lens",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "DSH plugin for AST context compression, test log filtering, and token budget guard",
   "type": "module",
   "main": "lib/index.js",
@@ -55,6 +55,12 @@
     "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.6",
     "@deepseek-ai/dsh-settings": "^0.1.0-rc.6",
     "@deepseek-ai/dsh-tools": "^0.1.0-rc.6",
-    "@deepseek-ai/schemastery": "^3.18.1"
+    "@deepseek-ai/schemastery": "^3.18.1",
+    "dsh-better-sidebar": "^0.18.0-alpha.0"
+  },
+  "peerDependenciesMeta": {
+    "dsh-better-sidebar": {
+      "optional": true
+    }
   }
 }

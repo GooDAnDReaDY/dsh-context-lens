@@ -1,2 +1,4 @@
-- id: dsh-context-lens
-  name: '@goodandready/dsh-context-lens'
+# dsh-context-lens: строка плагина в дереве загрузчика профиля.
+- insert:
+    - id: dsh-context-lens
+      name: '@goodandready/dsh-context-lens'

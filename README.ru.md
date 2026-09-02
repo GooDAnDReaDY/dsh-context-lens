@@ -65,13 +65,16 @@ graph LR
 ## ✨ Ключевые возможности
 
 ### 1. 🧬 Мультиязычный AST-скелетонизатор кода (`lib/ast/skeletonizer.js`)
-* Извлекает структурные интерфейсы, сигнатуры функций, методы классов, типы и экспорты для **TypeScript, JavaScript, Python и Go**;
+* Извлекает структурные интерфейсы, сигнатуры функций, методы классов, типы и экспорты для **TypeScript, JavaScript, Python, Go, Rust и Java**;
+* Поддерживает `pub async fn`, `async fn`, `pub(crate)` и `pub(super)` в Rust;
+* Сохраняет JSDoc, docstrings и структурные комментарии над определениями;
 * Удаляет внутренние тела функций и комментарии реализации, оставляя точную архитектуру файла;
 * Позволяет агенту обозревать всю структуру проекта без загрузки лишних десятков тысяч токенов.
 
 ### 2. 🗜️ Быстрый компрессор логов (`lib/compression/log-compressor.js`)
-* Высокопроизводительный $O(n)$ фильтр шума логов тестирования и сборки (Jest, Vitest, Pytest, Go test, NPM, Webpack, Cargo);
-* Автоматически вырезает успешные проверки (`PASS`, `✓`, `ok`) и служебные уведомления;
+* Высокопроизводительный $O(n)$ фильтр шума логов тестирования и сборки (Jest, Vitest, Pytest, Go test, NPM, Webpack, Cargo, Maven/Gradle);
+* Автоматическая очистка терминальных ANSI-эскейп последовательностей;
+* Вырезает успешные проверки (`PASS`, `✓`, `ok`) и служебные уведомления;
 * Сохраняет строки падений, стек-трейсы, расхождения в утверждениях (`Expected ... Received ...`) и контекстное окружение ошибки;
 * 3 Режима сжатия: `raw`, `balanced`, `aggressive`.
 
@@ -81,7 +84,8 @@ graph LR
 
 ### 4. 📊 Трекер экономии токенов (`lib/tokens/tracker.js` & `lib/client.js`)
 * Фиксация точного числа токенов до и после сжатия;
-* Подсчёт накопленной экономии за сессию с отображением процента эффективности в Web UI.
+* Подсчёт накопленной экономии за сессию с отображением процента эффективности в Web UI;
+* Контроль сессионного бюджета токенов (Token Budget Guard) с предупреждением при превышении 90%.
 
 ---
 
@@ -90,9 +94,9 @@ graph LR
 | Имя инструмента | Параметры | Описание |
 |---|---|---|
 | `context_lens_focus` | `paths: string[]`, `maxDepth?: number` | Задаёт пути активного фокуса; всё остальное сворачивается в AST-скелеты |
-| `context_lens_compress_log` | `log: string`, `mode?: "raw"\|"balanced"\|"aggressive"` | Сжимает вывод тестов и терминала, сохраняя стек-трейсы и ошибки |
-| `context_lens_compress_code` | `code: string`, `language?: string`, `maxDepth?: number` | Генерирует структурный AST-скелет из переданного исходного кода |
-| `context_lens_stats` | *(нет)* | Возвращает метрики сэкономленных токенов и процент эффективности |
+| `context_lens_compress_log` | `text: string` *(или `log`)*, `mode?: "raw"\|"balanced"\|"aggressive"`, `maxLines?: number`, `auto?: boolean` | Сжимает вывод тестов и терминала, сохраняя стек-трейсы и ошибки |
+| `context_lens_compress_code` | `code: string`, `language?: string`, `maxDepth?: number`, `filePath?: string` | Генерирует структурный AST-скелет из переданного исходного кода |
+| `context_lens_stats` | *(нет)* | Возвращает метрики сэкономленных токенов, историю и статус бюджета |
 
 ---
 
@@ -108,10 +112,24 @@ dsh plugin --profile web add @goodandready/dsh-context-lens
 
 ```yaml
 dsh-context-lens:
-  compressionMode: balanced      # 'raw', 'balanced' или 'aggressive'
-  astSkeletonMaxDepth: 3        # Максимальная глубина обхода AST-сигнатур
-  tokenSavingsTracking: true    # Включить трекинг сэкономленных токенов
+  compressionMode: balanced        # 'raw', 'balanced' или 'aggressive'
+  astSkeletonMaxDepth: 3          # Максимальная глубина обхода AST-сигнатур (1..10)
+  tokenSavingsTracking: true      # Включить трекинг сэкономленных токенов
+  autoCompressThreshold: 4000     # Порог авто-сжатия в символах (0 для отключения)
+  budgetLimit: 100000             # Сессионный лимит бюджета токенов
+  autoCollapse: true              # Автоматически сворачивать UI при исчерпании бюджета
 ```
+
+---
+
+## 📝 История версий
+
+### v0.1.8
+* **Fix**: Поддержка как `text`, так и `log` в параметрах инструмента `context_lens_compress_log`.
+* **Fix**: Кроссплатформенное разрешение путей в тестах на Windows (`fileURLToPath`).
+* **Fix**: Динамическая передача и учёт `budgetLimit` в трекере токенов.
+* **Fix**: Корректная обработка цветных логов с терминальными ANSI-кодами.
+* **Fix**: Расширена поддержка Rust (`pub async fn`, `pub(crate)`) и правильные комментарии `#` для Python в AST-скелетонизаторе.
 
 ---
 

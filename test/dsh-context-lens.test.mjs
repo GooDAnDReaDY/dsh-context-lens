@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 
-const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (name) => fs.readFileSync(path.join(root, name), 'utf8');
 const pkg = JSON.parse(read('package.json'));
 const name = '@goodandready/dsh-context-lens';

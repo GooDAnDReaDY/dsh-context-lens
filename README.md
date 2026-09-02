@@ -65,12 +65,15 @@ graph LR
 ## ✨ Key Capabilities & Modules
 
 ### 1. 🧬 Multi-Language AST Code Skeletonizer (`lib/ast/skeletonizer.js`)
-* Automatically extracts structural interfaces, function signatures, classes, types, and exports across **TypeScript, JavaScript, Python, and Go**;
+* Automatically extracts structural interfaces, function signatures, classes, types, and exports across **TypeScript, JavaScript, Python, Go, Rust, and Java**;
+* Supports `pub async fn`, `async fn`, `pub(crate)` and `pub(super)` in Rust;
+* Retains JSDoc, docstrings, and structural comments preceding definitions;
 * Drops internal function implementations, loops, and repetitive boilerplate while preserving indentation and export declarations;
 * Allows the agent to understand entire multi-package repository architectures without loading tens of thousands of implementation tokens.
 
 ### 2. 🗜️ Fast Heuristic Log Condenser (`lib/compression/log-compressor.js`)
-* High-performance $O(n)$ heuristic line filter for test runners and build tools (Jest, Vitest, Pytest, Go test, NPM, Webpack, Cargo);
+* High-performance $O(n)$ heuristic line filter for test runners and build tools (Jest, Vitest, Pytest, Go test, NPM, Webpack, Cargo, Maven/Gradle);
+* Strips terminal ANSI escape color sequences before evaluating regex patterns;
 * Automatically filters out passing test noise (`PASS`, `✓`, `ok`) and build notices;
 * Retains critical error lines, stack traces, assertion failures (`Expected ... Received ...`), and failure context windows;
 * 3 Aggressiveness Modes: `raw`, `balanced`, and `aggressive`.
@@ -81,7 +84,8 @@ graph LR
 
 ### 4. 📊 Token Savings Tracking & Dashboard (`lib/tokens/tracker.js` & `lib/client.js`)
 * Measures exact token counts before and after compression;
-* Calculates cumulative session token savings and displays live efficiency percentage badges in the DSH interface.
+* Calculates cumulative session token savings and displays live efficiency percentage badges in the DSH interface;
+* Enforces Token Budget Guard limits with alert warnings when exceeding 90% budget.
 
 ---
 
@@ -90,9 +94,9 @@ graph LR
 | Tool Name | Parameters | Description |
 |---|---|---|
 | `context_lens_focus` | `paths: string[]`, `maxDepth?: number` | Designates active focus files/folders; collapses surrounding workspace into AST skeletons |
-| `context_lens_compress_log` | `log: string`, `mode?: "raw"\|"balanced"\|"aggressive"` | Condenses terminal/test outputs, keeping only stack traces and failure windows |
-| `context_lens_compress_code` | `code: string`, `language?: string`, `maxDepth?: number` | Generates a clean structural AST skeleton from raw source code |
-| `context_lens_stats` | *(none)* | Returns real-time cumulative token savings, original token count, and efficiency % |
+| `context_lens_compress_log` | `text: string` *(or `log`)*, `mode?: "raw"\|"balanced"\|"aggressive"`, `maxLines?: number`, `auto?: boolean` | Condenses terminal/test outputs, keeping only stack traces and failure windows |
+| `context_lens_compress_code` | `code: string`, `language?: string`, `maxDepth?: number`, `filePath?: string` | Generates a clean structural AST skeleton from raw source code |
+| `context_lens_stats` | *(none)* | Returns real-time cumulative token savings, history, and budget status |
 
 ---
 
@@ -111,10 +115,24 @@ dsh plugin --profile web add @goodandready/dsh-context-lens
 
 ```yaml
 dsh-context-lens:
-  compressionMode: balanced      # 'raw', 'balanced', or 'aggressive'
-  astSkeletonMaxDepth: 3        # Maximum depth level for AST signature traversal
-  tokenSavingsTracking: true    # Track and display live token savings
+  compressionMode: balanced        # 'raw', 'balanced', or 'aggressive'
+  astSkeletonMaxDepth: 3          # Maximum depth level for AST signature traversal (1..10)
+  tokenSavingsTracking: true      # Track and display live token savings
+  autoCompressThreshold: 4000     # Auto-compression character threshold (0 to disable)
+  budgetLimit: 100000             # Session token budget limit
+  autoCollapse: true              # Auto-collapse UI when budget is nearly exhausted
 ```
+
+---
+
+## 📝 Version History
+
+### v0.1.8
+* **Fix**: Support both `text` and `log` parameter names in `context_lens_compress_log`.
+* **Fix**: Cross-platform path resolution in unit tests on Windows (`fileURLToPath`).
+* **Fix**: Dynamic propagation of `budgetLimit` configuration into token tracker.
+* **Fix**: ANSI terminal escape sequence stripping for colored logs.
+* **Fix**: Expanded Rust syntax support (`pub async fn`, `pub(crate)`) and proper `#` comment prefix for Python.
 
 ---
 

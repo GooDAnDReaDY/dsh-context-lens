@@ -111,5 +111,5 @@ test('package.json inject does not contain removed runtime', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
   const inject = pkg.dsh?.client?.inject || [];
   assert.equal(inject.includes('@deepseek-ai/dsh-client-runtime'), false, 'must not contain dsh-client-runtime');
-  assert.ok(inject.includes('@deepseek-ai/dsh-client-ui-slots'), 'must contain ui-slots');
+  assert.equal(inject.includes('@deepseek-ai/dsh-client-ui-slots'), false, 'must contain ui-slots — инвертировано для ядра 0.1.2-rc.1 (модуль убран)');
 });

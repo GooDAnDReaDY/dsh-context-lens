@@ -113,3 +113,18 @@ test('package.json inject does not contain removed runtime', () => {
   assert.equal(inject.includes('@deepseek-ai/dsh-client-runtime'), false, 'must not contain dsh-client-runtime');
   assert.equal(inject.includes('@deepseek-ai/dsh-client-ui-slots'), false, 'must contain ui-slots — инвертировано для ядра 0.1.2-rc.1 (модуль убран)');
 });
+
+test('client registers conversation.session.header.utilities chip via inject (#31)', () => {
+  const client = loadClientFactory();
+  const slots = new MockSlotCore();
+  const locale = { register: () => {} };
+  const ctx = { slots, locale };
+  assert.doesNotThrow(() => client.apply(ctx));
+  assert.equal(slots.registered.length, 0, 'should not register before declaration');
+  slots.declare('conversation.session.header.utilities');
+  assert.equal(slots.registered.length, 1, 'should register header chip after declaration');
+  assert.equal(slots.registered[0].opts.name, 'conversation.session.header.utilities');
+  assert.equal(slots.registered[0].opts.id, 'dsh-context-lens-header-chip');
+  assert.equal(slots.registered[0].opts.order, 7);
+});
+

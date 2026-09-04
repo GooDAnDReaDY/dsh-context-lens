@@ -127,6 +127,14 @@ dsh-context-lens:
 
 ## 📝 Version History
 
+### v0.1.10
+* **Fix**: Register session header chip in `conversation.session.header.utilities` (`order: 7`).
+* **Fix**: Ensure chip is always visible (`◐ Lens` on initial session, `◐ <N>%` when savings available, `⚠` on low budget).
+* **Feature**: Interactive dropdown Popover on chip click: token savings breakdown, budget progress bar, recent operations, and refresh button.
+
+### v0.1.9
+* **Fix**: Remove obsolete kernel modules from client injects for DSH 0.1.2-rc.1 compatibility.
+
 ### v0.1.8
 * **Fix**: Support both `text` and `log` parameter names in `context_lens_compress_log`.
 * **Fix**: Cross-platform path resolution in unit tests on Windows (`fileURLToPath`).

@@ -1,6 +1,6 @@
 {
   "name": "@goodandready/dsh-context-lens",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "DSH plugin for AST context compression, test log filtering, and token budget guard",
   "type": "module",
   "main": "lib/index.js",

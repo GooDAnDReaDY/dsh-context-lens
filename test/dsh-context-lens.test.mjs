@@ -30,7 +30,7 @@ test('tracked package sources contain no host-specific infra references', () => 
 test('browser entry does not depend on removed dsh-client-runtime (alpha2)', () => {
   const inject = pkg.dsh?.client?.inject || [];
   assert.equal(inject.includes('@deepseek-ai/dsh-client-runtime'), false, 'inject must not contain dsh-client-runtime for DSH 0.1.2-alpha.2');
-  assert.ok(inject.includes('@deepseek-ai/dsh-client-ui-slots'), 'inject must contain dsh-client-ui-slots');
+  assert.equal(inject.includes('@deepseek-ai/dsh-client-ui-slots'), false, 'inject must contain dsh-client-ui-slots — инвертировано для ядра 0.1.2-rc.1 (модуль убран)');
   const clientText = read('lib/client.js');
   assert.equal(clientText.includes('@deepseek-ai/dsh-client-runtime'), false, 'client.js must not require dsh-client-runtime');
 });

@@ -147,3 +147,16 @@ dsh-context-lens:
 ## 📄 License
 
 MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)
+
+
+## Changed in v0.1.11
+
+Audit fixes (#33–#47, #18):
+
+- Auto-compress no longer forces `balanced`; uses configured `compressionMode`.
+- `budgetLimit` stops token counting after the limit (matches settings description).
+- Focus state is per-session (`sessionId`), not process-global.
+- Settings card exposes `budgetLimit`, `autoCollapse`, `autoCompressThreshold`; low-budget shows a warning instead of force-closing the card.
+- Client `betterSidebar` inject is optional; preview uses server `/dsh-context-lens/compress-preview`.
+- Python imports kept in skeletons; Java locals no longer mistaken for signatures.
+- Shared `estimateTokens` helper; unused `dsh-credentials` peer removed.

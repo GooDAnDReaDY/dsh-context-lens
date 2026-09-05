@@ -160,3 +160,8 @@ Audit fixes (#33–#47, #18):
 - Client `betterSidebar` inject is optional; preview uses server `/dsh-context-lens/compress-preview`.
 - Python imports kept in skeletons; Java locals no longer mistaken for signatures.
 - Shared `estimateTokens` helper; unused `dsh-credentials` peer removed.
+
+
+## Changed in v0.1.12
+
+#43: extract shared `StatusPanel` used by LensTab and HeaderChip popover (budget bar, history, refresh).

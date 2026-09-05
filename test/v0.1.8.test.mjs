@@ -4,10 +4,7 @@ import { compressLog } from '../lib/compression/log-compressor.js';
 import { skeletonize } from '../lib/ast/skeletonizer.js';
 import * as tracker from '../lib/tokens/tracker.js';
 
-function shouldAutoCompress(text, threshold) {
-  if (!threshold || threshold <= 0) return false;
-  return (text || '').length > threshold || (text || '').split('\n').length > 100;
-}
+import { shouldAutoCompress } from '../lib/auto-compress.js';
 
 test('compressLog handles colored terminal logs with ANSI codes', () => {
   const coloredLog = [

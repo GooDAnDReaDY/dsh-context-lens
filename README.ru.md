@@ -149,3 +149,8 @@ MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)
 ## Changed in v0.1.11
 
 Исправления audit #33–#47 / #18: режим auto-compress не форсирует balanced; budgetLimit останавливает подсчёт; focus per-session; поля settings card; optional betterSidebar; серверный preview; Python imports / Java locals; общий estimateTokens; удалён unused peer dsh-credentials.
+
+
+## Changed in v0.1.12
+
+#43: extract shared `StatusPanel` used by LensTab and HeaderChip popover (budget bar, history, refresh).

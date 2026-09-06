@@ -154,3 +154,10 @@ MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)
 ## Changed in v0.1.12
 
 #43: extract shared `StatusPanel` used by LensTab and HeaderChip popover (budget bar, history, refresh).
+
+
+## Changed in v0.1.13
+
+- **Fix (#50)**: Безопасная регистрация вкладки BetterSidebar через `ctx.inject(['betterSidebar'], ...)` вместо прямого чтения свойства из Cordis Context Proxy. Устранена ошибка `cannot get property "betterSidebar" without inject` при загрузке клиентской половины в DSH.
+- **Fix (#50)**: Безопасное обращение к `_ctx.settingsScope` в `PluginCard` через try/catch.
+- **Тесты**: Добавлены регрессионные тесты со строгим Cordis Context Proxy.

@@ -128,3 +128,62 @@ test('client registers conversation.session.header.utilities chip via inject (#3
   assert.equal(slots.registered[0].opts.order, 7);
 });
 
+
+test('client apply does not access uninjected properties on ctx (Cordis proxy safety)', () => {
+  const client = loadClientFactory();
+  const declaredInject = new Set(client.inject || []);
+  const accessedProps = [];
+
+  // Strict Cordis Context Proxy simulation: accessing any property not in declaredInject throws
+  const rawCtx = {
+    slots: new MockSlotCore(),
+    locale: { register: () => {} },
+    inject: (deps, callback) => {
+      // simulate subcontext with injected dependencies
+      const subCtx = {};
+      for (const dep of deps) {
+        if (dep === 'betterSidebar') {
+          subCtx.betterSidebar = { registerTab: () => () => {} };
+        } else {
+          subCtx[dep] = {};
+        }
+      }
+      callback(subCtx);
+    },
+    effect: (fn) => fn()
+  };
+
+  const strictCtx = new Proxy(rawCtx, {
+    get(target, prop, receiver) {
+      if (typeof prop === 'symbol') return Reflect.get(target, prop, receiver);
+      if (['slots', 'locale', 'inject', 'effect'].includes(prop)) {
+        accessedProps.push(prop);
+        return Reflect.get(target, prop, receiver);
+      }
+      // If code tries to directly access ctx.betterSidebar or any other service:
+      throw new Error(`cannot get property "${String(prop)}" without inject`);
+    }
+  });
+
+  // apply must succeed without throwing "cannot get property betterSidebar without inject"
+  assert.doesNotThrow(() => client.apply(strictCtx));
+});
+
+test('client handles host without ctx.inject gracefully without accessing ctx.betterSidebar', () => {
+  const client = loadClientFactory();
+  const rawCtx = {
+    slots: new MockSlotCore(),
+    locale: { register: () => {} }
+  };
+  const strictCtx = new Proxy(rawCtx, {
+    get(target, prop, receiver) {
+      if (typeof prop === 'symbol') return Reflect.get(target, prop, receiver);
+      if (['slots', 'locale', 'inject'].includes(prop)) {
+        return Reflect.get(target, prop, receiver);
+      }
+      throw new Error(`cannot get property "${String(prop)}" without inject`);
+    }
+  });
+
+  assert.doesNotThrow(() => client.apply(strictCtx));
+});

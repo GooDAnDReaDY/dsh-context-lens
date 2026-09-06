@@ -72,3 +72,10 @@
 1. **Слот**: `conversation.session.header.utilities` — строго зафиксирован как единственное легитимное место для мониторов и телеметрии сессии.
 2. **Никакого полного скрытия**: чип всегда присутствует в шапке (в отличие от старого ошибочного `return null`).
 3. **Только нативные CSS-переменные DSH**: `--dsw-alias-bg-layer-*`, `--dsw-alias-label-*`, `--dsw-alias-border-*`.
+
+
+## 5. Client Services & Dependency Safety (v0.1.13)
+
+1. **Cordis Context Invariants**: Клиентская половина никогда не обращается напрямую к свойствам сервисов `ctx.<service>`, не объявленным в `module.exports.inject`.
+2. **Опциональный BetterSidebar**: Регистрация вкладки `dsh-context-lens:tab` выполняется исключительно через `ctx.inject(['betterSidebar'], (sctx) => ...)` внутри блока проверки `typeof ctx.inject === 'function'`.
+3. **Фолбэк настроек**: Обращение к `_ctx.settingsScope` обернуто в try/catch для предотвращения ошибок при работе под строгим прокси контекста.

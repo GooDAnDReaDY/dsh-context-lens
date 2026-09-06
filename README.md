@@ -165,3 +165,10 @@ Audit fixes (#33–#47, #18):
 ## Changed in v0.1.12
 
 #43: extract shared `StatusPanel` used by LensTab and HeaderChip popover (budget bar, history, refresh).
+
+
+## Changed in v0.1.13
+
+- **Fix (#50)**: Guard optional `betterSidebar` tab registration via `ctx.inject(['betterSidebar'], ...)` instead of direct property access on Cordis context proxy, resolving `cannot get property "betterSidebar" without inject` on client boot.
+- **Fix (#50)**: Safely guard `_ctx.settingsScope` access in `PluginCard` with try/catch to prevent proxy property errors.
+- **Test**: Added regression test suite simulating strict Cordis Context Proxy behavior.

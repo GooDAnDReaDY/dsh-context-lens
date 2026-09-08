@@ -172,3 +172,12 @@ Audit fixes (#33–#47, #18):
 - **Fix (#50)**: Guard optional `betterSidebar` tab registration via `ctx.inject(['betterSidebar'], ...)` instead of direct property access on Cordis context proxy, resolving `cannot get property "betterSidebar" without inject` on client boot.
 - **Fix (#50)**: Safely guard `_ctx.settingsScope` access in `PluginCard` with try/catch to prevent proxy property errors.
 - **Test**: Added regression test suite simulating strict Cordis Context Proxy behavior.
+
+
+## Changed in v0.1.14
+
+- **Fix (#52)**: Multiline AST signature parsing in `skeletonizer.js` for TypeScript, JavaScript, Rust, and Go with complex parameter types and return annotations.
+- **Feature (#52)**: Registered `context_lens_reset` tool to allow resetting tracker statistics and history at the start of new tasks.
+- **Quality & UX (#52)**: Dynamic RU/EN locale detection in `HeaderChip`, `LensTab`, and `StatusPanel` via `ctx.locale` for seamless UI integration.
+- **Perf & Stability (#52)**: Adaptive polling in `HeaderChip` pausing on hidden tabs (`visibilitychange`) and polling actively (4s) only when popover is open.
+- **Reliability (#52)**: Atomic settings save (`scope.patch` / `scope.setAll`) in `PluginCard` with graceful fallback.

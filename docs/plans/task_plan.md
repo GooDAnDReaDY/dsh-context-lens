@@ -1,27 +1,19 @@
-# Техническое задание и план реализации: dsh-context-lens
+# Plan: Issue #54 — Support native DSH Sidebar alongside dsh-better-sidebar
 
-## 1. Цели и назначение
-Оптимизация контекстного окна и экономия токенов в сессиях DSH за счет интеллектуальной фильтрации длинных логов терминала (тесты, npm-вывод) и AST-скелетонизации больших исходных файлов.
+## Goal
+Make the Context Lens UI available and stable across all DSH sidebar environments:
+1. Native DSH Sidebar only (`sidebarRightTabs` / `sidebar.right.pane.tab`).
+2. Legacy `dsh-better-sidebar` only (`betterSidebar.registerTab`).
+3. Both sidebars active simultaneously (deterministic IDs, no conflict, no double mounting).
+4. Neither sidebar active (safe fallback, zero boot errors).
 
-## 2. Архитектура решения
-- **Модуль `LogOutputCompressor`**: эвристический парсер вывода тестовых раннеров (Jest, Pytest, Go test, Vitest), сжимающий тысячи строк до конкретных сбоев и стектрейсов.
-- **Модуль `ASTSkeletonizer`**: генерирует компактные сигнатуры функций, классов и типов для JS/TS, Python, Go.
-- **Сессионный трекер токенов**: подсчитывает количество сэкономленных токенов и выводит статистику в UI.
+## Status: complete
+Current Phase: Phase 5 (Complete)
+Next Step: Propose deployment to user
 
-## 3. Декомпозиция задач (Work Breakdown Structure)
-- [ ] **Этап 1: Движки сжатия данных (Backend Processing)**
-  - [ ] 1.1 Реализация `LogOutputCompressor` с шаблонами популярных тест-раннеров и сборщиков.
-  - [ ] 1.2 Легковесный парсер `ASTSkeletonizer` без тяжелых нативных зависимостей.
-  - [ ] 1.3 Сервис подсчета приблизительного расхода и экономии токенов.
-- [ ] **Этап 2: Инструменты агента (Agent Tools)**
-  - [ ] 2.1 Тул `context_lens_focus` (установка фокусных файлов/папок с авто-сворачиванием остальных).
-  - [ ] 2.2 Тул `context_lens_compress_log` (ручной запрос на сжатие любого текстового блока).
-  - [ ] 2.3 Тул `context_lens_stats` (статистика сессии по токенам).
-- [ ] **Этап 3: Клиентский интерфейс (Frontend Web UI)**
-  - [ ] 3.1 Виджет бейджа экономии токенов в шапке/панели сессии.
-  - [ ] 3.2 Карточка настроек `settings.plugin.item` с переключателями режимов.
-  - [ ] 3.3 Интерактивный предпросмотр сжатия логов в карточке настроек.
-- [ ] **Этап 4: Тестирование и оптимизация**
-  - [ ] 4.1 Тесты на сжатие реальных дампов Jest/Pytest логов (проверка сохранения строк с ошибками).
-  - [ ] 4.2 Тесты AST-парсинга на синтаксически сложных файлах.
-  - [ ] 4.3 Smoke-прогон `npm test` чисто.
+## Phases
+- [x] Phase 1: Research native DSH Sidebar contract and lifecycle in DSH 0.1.5-alpha.1
+- [x] Phase 2: Implement native sidebar adapter & coexistence logic in lib/client.js
+- [x] Phase 3: Add unit tests covering all 4 matrix scenarios in test/sidebar-matrix-54.test.mjs
+- [x] Phase 4: Update DESIGN.md, README.md, README.ru.md, and package.json to v0.1.15
+- [x] Phase 5: Verification & Gitea commit

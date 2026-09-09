@@ -174,6 +174,13 @@ Audit fixes (#33–#47, #18):
 - **Test**: Added regression test suite simulating strict Cordis Context Proxy behavior.
 
 
+## Changed in v0.1.15
+
+- **Feature (#54)**: Support native DSH right sidebar (`ctx.sidebarRightTabs` + `sidebar.right.pane.tab` slot) introduced in DSH 0.1.5-alpha.1.
+- **Compatibility (#54)**: Preserve legacy `dsh-better-sidebar` integration with deterministic, non-conflicting IDs (`@goodandready/dsh-context-lens` vs `dsh-context-lens:tab`).
+- **Resilience (#54)**: Clean boot and graceful fallback across all 4 layouts (Native only, Legacy only, Both active, Neither active).
+- **Tests (#54)**: Added comprehensive test matrix in `test/sidebar-matrix-54.test.mjs`.
+
 ## Changed in v0.1.14
 
 - **Fix (#52)**: Multiline AST signature parsing in `skeletonizer.js` for TypeScript, JavaScript, Rust, and Go with complex parameter types and return annotations.

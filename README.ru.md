@@ -163,6 +163,13 @@ MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)
 - **Тесты**: Добавлены регрессионные тесты со строгим Cordis Context Proxy.
 
 
+## Changed in v0.1.15
+
+- **Функциональность (#54)**: Поддержка встроенной правой боковой панели DSH (`ctx.sidebarRightTabs` + слот `sidebar.right.pane.tab`) из DSH 0.1.5-alpha.1.
+- **Совместимость (#54)**: Сохранена интеграция с легаси `dsh-better-sidebar` с детерминированными неконфликтующими идентификаторами (`@goodandready/dsh-context-lens` и `dsh-context-lens:tab`).
+- **Отказоустойчивость (#54)**: Чистая инициализация во всех 4 конфигурациях (только Native, только Legacy, обе активны, обе отсутствуют).
+- **Тесты (#54)**: Добавлена матрица тестов в `test/sidebar-matrix-54.test.mjs`.
+
 ## Changed in v0.1.14
 
 - **Исправление (#52)**: Поддержка многострочных сигнатур функций и методов в `skeletonizer.js` (TypeScript, JavaScript, Rust, Go) со сложными типами параметров и аннотациями возвращаемых значений.

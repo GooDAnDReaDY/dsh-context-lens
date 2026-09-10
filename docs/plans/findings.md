@@ -1,12 +1,14 @@
-# Findings: Native DSH Sidebar Contract (0.1.5-alpha.1)
+# Findings: dsh-clinebot Styling & Code Health
 
-- Native Right Sidebar service: `ctx.sidebarRightTabs` (Tab Registry) and `ctx.sidebarRight` (Navigation/Controller).
-- Registration mechanism:
-  1. `ctx.sidebarRightTabs.register({ id, kind, title, guide })` where `id` is unique (e.g. `@goodandready/dsh-context-lens`), `kind` is discriminator (e.g. `'context-lens'`), `title` is `(address) => string`, and `guide` is optional guide card array.
-  2. `ctx.slots.inject('sidebar.right.pane.tab', () => ctx.slots.register({ name: 'sidebar.right.pane.tab', key: id, locale, inject }, Component))`
-- Injected props to component: `{ sidebar, panel, tab }` via hook or slot injection.
-- Legacy BetterSidebar service: `ctx.inject(['betterSidebar'], sctx => sctx.betterSidebar.registerTab({ id, title, icon, order, component }))`.
-- Coexistence:
-  - Tab IDs and keys must be distinct and deterministic.
-  - State should be clean and independent per surface.
-  - Disposers must be preserved for clean teardown.
+- `dsh-clinebot` styling principles:
+  - Injected style block (`ensureCss`) tagged with dataset `dshPlugin`.
+  - Component cards with clean border `var(--dsw-alias-border-l2)` and background `var(--dsw-alias-bg-layer-3)`.
+  - Stat grid (`.cb-grid-2`, `.cb-stat-box`) with bold value (`font-size: 18px; font-weight: 700`) and subtle label (`font-size: 12px; color: secondary`).
+  - Progress bar with rounded pill track (`height: 10px; border-radius: 999px; background: layer-1; border: border-l2`).
+  - Badges (`.cb-badge`, `.cb-badge-ok`, `.cb-badge-warn`).
+  - Action buttons with clean hover and disabled states (`.cb-btn`, `.cb-btn-primary`).
+  - Robust `ErrorBoundary` preventing React 310 or blank screen on crash.
+- Code Health & Stability in `dsh-context-lens`:
+  - `PluginCard` scope binding was reading once without reactive subscription to settings updates.
+  - `compressLog` and `skeletonize` did not explicitly check for non-string inputs (e.g. numbers or null), which could throw TypeError.
+  - Test coverage can be expanded for edge cases in log compressor and client UI error handling.

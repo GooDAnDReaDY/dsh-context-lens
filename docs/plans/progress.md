@@ -1,8 +1,13 @@
-# Progress Log
+# Progress: Issue #57 - Unified Visual Style & Stability
 
-- 2026-09-09: Initialized worktree `.worktrees/feat-54-native-sidebar` and branch `feat/54-native-sidebar`.
-- 2026-09-09: Researched `@deepseek-ai/dsh-client-ui-sidebar-right` implementation and types on MiniAI.
-- 2026-09-09: Implemented native DSH sidebar adapter in `lib/client.js` with `sidebarRightTabs.register` and `sidebar.right.pane.tab` slot injection.
-- 2026-09-09: Created `test/sidebar-matrix-54.test.mjs` verifying all 4 sidebar layouts.
-- 2026-09-09: Updated `docs/design/DESIGN.md`, `README.md`, `README.ru.md`, and bumped version to 0.1.15 in `package.json`.
-- 2026-09-09: Passed all 33/33 tests.
+## Completed
+1. Audited visual style of `dsh-clinebot` and extracted core UI primitives.
+2. Injected `.cl-*` CSS rules scoped with theme tokens (`--dsw-alias-*`).
+3. Rebuilt `StatusPanel`, `PluginCard`, `LensTab`, and `HeaderChip` using cards, stat-grids, and pill progress bars.
+4. Added `ErrorBoundary` for clean error isolation and retry functionality.
+5. Supported `scope.getSnapshot()` and `scope.subscribe()` in `PluginCard`.
+6. Verified edge-case sanitization for inputs across `compressLog`, `skeletonize`, `shouldAutoCompress`, and `tracker`.
+7. Created comprehensive test suite `test/visual-and-stability-57.test.mjs` (8 subtests, 100% pass).
+8. Full test suite passing (42 tests).
+9. Updated documentation: `docs/design/DESIGN.md`, `README.md`, `README.ru.md`.
+10. Version bumped to `0.1.16` in `package.json`.

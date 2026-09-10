@@ -188,3 +188,11 @@ Audit fixes (#33–#47, #18):
 - **Quality & UX (#52)**: Dynamic RU/EN locale detection in `HeaderChip`, `LensTab`, and `StatusPanel` via `ctx.locale` for seamless UI integration.
 - **Perf & Stability (#52)**: Adaptive polling in `HeaderChip` pausing on hidden tabs (`visibilitychange`) and polling actively (4s) only when popover is open.
 - **Reliability (#52)**: Atomic settings save (`scope.patch` / `scope.setAll`) in `PluginCard` with graceful fallback.
+
+### UI & Styling System (v0.1.16+)
+
+Context Lens shares its visual language and component architecture with `dsh-clinebot`:
+- **Native Design System**: 100% theme integration using `--dsw-alias-*` tokens.
+- **Resilient UI Surfaces**: Every component (`PluginCard`, `LensTab`, `StatusPanel`) is protected by an `ErrorBoundary` with instant retry capability.
+- **Reactive Settings**: Live updates via `scope.subscribe()` and zero-delay reads via `scope.getSnapshot()`.
+- **Adaptive Telemetry**: Popover and tab display metric cards for tokens saved, percentage reduced, and live budget utilization.

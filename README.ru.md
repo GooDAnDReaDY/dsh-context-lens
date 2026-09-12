@@ -22,6 +22,16 @@
   <a href="README.zh.md"><b>🇨🇳 中文说明</b></a>
 </p>
 
+<table align="center">
+  <tr>
+    <td align="center">
+      ⭐ <strong>Если вам нравится этот плагин, поставьте ему звезду на GitHub</strong> — это покажет мне, что плагин вам полезен, и будет мотивировать меня развивать его дальше.
+      <br><br>
+      🐛 <strong>Если вы нашли баг или хотите предложить новый функционал</strong>, создайте issue на GitHub на любом языке — я рассмотрю ваше предложение и реализую полезные идеи в одной из следующих версий плагина.
+    </td>
+  </tr>
+</table>
+
 </div>
 
 ---
@@ -145,23 +155,19 @@ dsh-context-lens:
 
 MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)
 
-
 ## Changed in v0.1.11
 
 Исправления audit #33–#47 / #18: режим auto-compress не форсирует balanced; budgetLimit останавливает подсчёт; focus per-session; поля settings card; optional betterSidebar; серверный preview; Python imports / Java locals; общий estimateTokens; удалён unused peer dsh-credentials.
 
-
 ## Changed in v0.1.12
 
 #43: extract shared `StatusPanel` used by LensTab and HeaderChip popover (budget bar, history, refresh).
-
 
 ## Changed in v0.1.13
 
 - **Fix (#50)**: Безопасная регистрация вкладки BetterSidebar через `ctx.inject(['betterSidebar'], ...)` вместо прямого чтения свойства из Cordis Context Proxy. Устранена ошибка `cannot get property "betterSidebar" without inject` при загрузке клиентской половины в DSH.
 - **Fix (#50)**: Безопасное обращение к `_ctx.settingsScope` в `PluginCard` через try/catch.
 - **Тесты**: Добавлены регрессионные тесты со строгим Cordis Context Proxy.
-
 
 ## Changed in v0.1.15
 

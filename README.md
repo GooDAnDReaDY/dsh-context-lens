@@ -22,6 +22,16 @@
   <a href="README.zh.md"><b>🇨🇳 中文说明</b></a>
 </p>
 
+<table align="center">
+  <tr>
+    <td align="center">
+      ⭐ <strong>If you like this plugin, please star it on GitHub</strong> — it shows me that the plugin is useful to you and motivates me to keep developing it.
+      <br><br>
+      🐛 <strong>If you find a bug or would like to request a feature</strong>, open a GitHub issue in any language — I will review your proposal and implement useful suggestions in a future plugin version.
+    </td>
+  </tr>
+</table>
+
 </div>
 
 ---
@@ -148,7 +158,6 @@ dsh-context-lens:
 
 MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)
 
-
 ## Changed in v0.1.11
 
 Audit fixes (#33–#47, #18):
@@ -161,18 +170,15 @@ Audit fixes (#33–#47, #18):
 - Python imports kept in skeletons; Java locals no longer mistaken for signatures.
 - Shared `estimateTokens` helper; unused `dsh-credentials` peer removed.
 
-
 ## Changed in v0.1.12
 
 #43: extract shared `StatusPanel` used by LensTab and HeaderChip popover (budget bar, history, refresh).
-
 
 ## Changed in v0.1.13
 
 - **Fix (#50)**: Guard optional `betterSidebar` tab registration via `ctx.inject(['betterSidebar'], ...)` instead of direct property access on Cordis context proxy, resolving `cannot get property "betterSidebar" without inject` on client boot.
 - **Fix (#50)**: Safely guard `_ctx.settingsScope` access in `PluginCard` with try/catch to prevent proxy property errors.
 - **Test**: Added regression test suite simulating strict Cordis Context Proxy behavior.
-
 
 ## Changed in v0.1.15
 

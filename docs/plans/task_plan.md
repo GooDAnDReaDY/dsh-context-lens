@@ -1,24 +1,31 @@
-# Plan: Issue #57 — Align UI with dsh-clinebot & Stability Improvements
+# Plan: Issue #59 — Multilingual i18n Compliance, Session Focus Management, and Configurable Budget Alert Threshold
 
 ## Goal
-1. Visual Polish: Align the Context Lens UI styling with `dsh-clinebot` design system:
-   - Dedicated CSS injection (`ensureCss`) using scoped classes (`.cl-section-card`, `.cl-stat-box`, `.cl-badge`, `.cl-bar-*`, `.cl-btn`, `.cl-input`, `.cl-banner-warning`).
-   - Unified ErrorBoundary around Card and Tab bodies.
-   - High-contrast typography, stat cards, progress bars, and badges for status and budget.
-2. Stability & Code Health:
-   - Fix `scope.get()` / `scope.subscribe()` reactive lifecycle in `PluginCard`.
-   - Remove dead code and unused fallback paths.
-   - Guard against non-string / nullish payloads in log compressor and skeletonizer.
-   - Add unit tests for error boundaries, CSS injection, edge cases, and expanded coverage.
+Advance `dsh-context-lens` functionality and align strictly with latest skills standards:
+1. **i18n Compliance (No Russian in product code/UI, Native ZH added)**:
+   - Removed embedded `ru` dictionary and all hardcoded Russian text/fallbacks from `lib/client.js`.
+   - Implemented native `zh` dictionary alongside canonical `en` dictionary in `lib/client.js`.
+   - Filed issue in `goodandready/dsh-russian-lang` (#187) with complete key/string mapping.
+2. **Session Focus UI Management**:
+   - In `StatusPanel` (popover and sidebar tab), displayed active focused paths (`focus.paths`) in `.cl-tag` chips.
+   - Added fast "Clear focus" action button calling `/dsh-context-lens/clear-focus` to reset focused paths without agent roundtrip.
+3. **Configurable Budget Alert Threshold (`budgetAlertPercent`)**:
+   - Added `budgetAlertPercent` (number, default 90, 50-99%) to `lib/index.js` `Config` schema.
+   - Wired `budgetAlertPercent` to settings card in `lib/client.js`.
+   - Updated `lib/tokens/tracker.js` and `StatusPanel` to use dynamic threshold for `lowBudget` warning.
+4. **Extended AST Skeletons in `lib/ast/skeletonizer.js`**:
+   - Added lightweight regex detection for C/C++ classes/methods, and SQL DDL tables/indexes.
+5. **Clean Distribution Verification**:
+   - Verified `npm pack --dry-run` contains zero internal non-product files (only lib/, cordis.patch.yml, READMEs, LICENSE, package.json).
+   - 47 unit tests passing.
 
 ## Status: in_progress
-Current Phase: Phase 1 (Visual Architecture & Analysis)
-Next Step: Implement UI updates and stability fixes in worktree
+Current Phase: Phase 5 (MiniPC test server verification & packaging)
 
 ## Phases
-- [ ] Phase 1: Code analysis, edge cases, and plan definition
-- [ ] Phase 2: Visual styling & ErrorBoundary implementation in lib/client.js
-- [ ] Phase 3: Server and utility stability improvements (safe inputs, dead code cleanup)
-- [ ] Phase 4: Unit test suite expansion
-- [ ] Phase 5: Documentation update (DESIGN.md, README.md, README.ru.md) & version bump to 0.1.16
-- [ ] Phase 6: Gitea PR, Test server verification, and release preparation
+- [x] Phase 1: Implement i18n (EN+ZH), Focus Management UI, Configurable budgetAlertPercent, and AST Skeletons
+- [x] Phase 2: Add and update unit tests (settings-card-fields, skeletonizer, tracker, i18n)
+- [x] Phase 3: Register Russian localization issue in `goodandready/dsh-russian-lang` (#187)
+- [x] Phase 4: Update documentation (DESIGN.md, README.md, README.zh.md, README.ru.md)
+- [ ] Phase 5: Pack check (`npm pack`), test on MiniPC test server (192.168.1.123)
+- [ ] Phase 6: Push, create Gitea PR, merge, tag v0.1.17, publish to npm & GitHub, deploy to production

@@ -18,13 +18,14 @@ test('all schema fields in lib/index.js Config are exposed and editable in lib/c
     if (m) schemaFields.push(m[1]);
   }
 
-  assert.equal(schemaFields.length, 6, 'Config should declare exactly 6 fields');
+  assert.equal(schemaFields.length, 7, 'Config should declare exactly 7 fields');
   assert.deepEqual(schemaFields, [
     'compressionMode',
     'astSkeletonMaxDepth',
     'tokenSavingsTracking',
     'autoCompressThreshold',
     'budgetLimit',
+    'budgetAlertPercent',
     'autoCollapse'
   ]);
 

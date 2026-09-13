@@ -42,7 +42,7 @@
 
 Large context windows are expensive, prone to model distraction, and vulnerable to rate limits. When agents inspect multi-file codebases or run bulky test suites, thousands of tokens are wasted on boilerplate function bodies, passing test logs, and build artifacts. 
 
-`dsh-context-lens` introduces **active path focusing, AST structural code skeletonization (JS/TS/Python/Go), and fast O(n) heuristic log compression**, shrinking context consumption by **up to 85%** while keeping 100% of essential architectural interfaces and failure traces.
+`dsh-context-lens` introduces **active path focusing, AST structural code skeletonization (JS/TS/Python/Go/Rust/Java/C/C++/SQL), and fast O(n) heuristic log compression**, shrinking context consumption by **up to 85%** while keeping 100% of essential architectural interfaces and failure traces.
 
 ```mermaid
 graph LR

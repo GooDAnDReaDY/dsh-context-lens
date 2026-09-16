@@ -132,3 +132,22 @@
    - Алерт `lowBudget` и предупреждающий статус в хедере рассчитываются динамически относительно заданного процента.
 4. **Расширенные легковесные скелетоны AST**:
    - `skeletonizer.js` поддерживает анализ C/C++ классов, методов и `#include`, а также SQL DDL (`CREATE/ALTER TABLE`, `INDEX`) без добавления внешних зависимостей (pure regex).
+
+## 8. HTTP Endpoints & Security Policy (v0.1.18)
+
+| Endpoint | Method | Security Checks | Description |
+|---|---|---|---|
+| `/dsh-context-lens/status` | `GET` | Open (safe read) | Returns session token savings stats, active focus, history |
+| `/dsh-context-lens/clear-focus` | `POST` | Loopback / Same-Origin | Clears focused paths for session (rejects GET with 405) |
+| `/dsh-context-lens/compress-preview` | `POST` | Loopback / Same-Origin | Preview log compression with 256KB max body & maxLines clamp |
+| `/api/dsh-context-lens/update` | `GET`, `POST` | Loopback + Header on POST | One-click plugin updater from npm registry |
+
+## 9. AI Agent Tools Contract (v0.1.18)
+
+Per DeepSeek Harness tool registration specification, all tools (`context_lens_focus`, `context_lens_compress_log`, `context_lens_compress_code`, `context_lens_reset`, `context_lens_stats`) must provide `output.render` returning an array of content blocks:
+```js
+const renderOutput = (_args, result) => [
+  { type: 'text', text: typeof result === 'string' ? result : JSON.stringify(result, null, 2) }
+];
+```
+This guarantees projection compatibility with core LLM stream collectors (`contentHasImage` / `contentHasFile`).

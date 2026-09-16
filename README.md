@@ -154,6 +154,16 @@ dsh-context-lens:
 
 ---
 
+
+## Changed in v0.1.18
+
+- **Critical Fix (#71, GH #2)**: Conformed `output.render` to DeepSeek Harness core contract by returning `ContentBlock[]` (`[{ type: 'text', text: ... }]`). Prevents irreversible DSH session poisoning caused by `TypeError: content.some is not a function` in `@deepseek-ai/dsh-llm`.
+- **Security & Reliability (#62, #63, #70)**: Hardened HTTP endpoints (`/clear-focus`, `/compress-preview`, `/status`): strictly requires `POST` on write actions, enforces loopback/same-origin trust checks, caps body size to 256KB (413 on exceed), validates `maxLines` (1-5000), and handles malformed session queries with clear 400 responses.
+- **One-Click In-App Updater (#61)**: Added canonical plugin updater module (`lib/updater.js`) with `/api/dsh-context-lens/update` endpoint and an in-app update UI banner with one-click update button in the settings card.
+- **Settings & Lifecycle (#64, #66)**: Injected `settingsScope` directly into client plugin dependencies and removed foreign `lanSettings` fallback. Wrapped settings and locale registrations in `ctx.effect` with disposable cleanups.
+- **UI & Theme Alignment (#67, #68)**: Implemented smooth vector SVG 14x14 chevron with 180° rotation animation and replaced hardcoded colors with `--dsw-alias-*` theme tokens for seamless light/dark mode presentation.
+- **Repository Hygiene (#65)**: Purged internal agent artifacts (`AGENTS.md`, `index.md`, `docs/plans/`) from tracked git tree and added denylist to `.gitignore`.
+
 ## 📄 License
 
 MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)

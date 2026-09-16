@@ -53,8 +53,9 @@ test('client.js calls ensureCss across all visual surfaces', () => {
   assert.ok(matches && matches.length >= 4, 'ensureCss must be called across all 4 visual entrypoints');
 });
 
-test('client.js binds lanSettings or settingsScope reactively', () => {
-  assert.ok(clientSrc.includes("lanSettings"), 'client.js must check lanSettings for DSH compatibility');
+test('client.js binds settingsScope reactively without foreign lanSettings (#64)', () => {
+  assert.ok(clientSrc.includes("settingsScope"), 'client.js must bind settingsScope reactively');
+  assert.ok(!clientSrc.includes("lanSettings"), 'client.js must not depend on foreign lanSettings');
   assert.ok(clientSrc.includes("scope.subscribe"), 'client.js must subscribe to settings updates');
   assert.ok(clientSrc.includes("getSnapshot"), 'client.js must support getSnapshot for instantaneous reads');
 });

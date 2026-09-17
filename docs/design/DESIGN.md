@@ -133,7 +133,7 @@
 4. **Расширенные легковесные скелетоны AST**:
    - `skeletonizer.js` поддерживает анализ C/C++ классов, методов и `#include`, а также SQL DDL (`CREATE/ALTER TABLE`, `INDEX`) без добавления внешних зависимостей (pure regex).
 
-## 8. HTTP Endpoints & Security Policy (v0.1.18)
+## 10. HTTP Endpoints & Security Policy (v0.1.18)
 
 | Endpoint | Method | Security Checks | Description |
 |---|---|---|---|
@@ -142,7 +142,7 @@
 | `/dsh-context-lens/compress-preview` | `POST` | Loopback / Same-Origin | Preview log compression with 256KB max body & maxLines clamp |
 | `/api/dsh-context-lens/update` | `GET`, `POST` | Loopback + Header on POST | One-click plugin updater from npm registry |
 
-## 9. AI Agent Tools Contract (v0.1.18)
+## 11. AI Agent Tools Contract (v0.1.18)
 
 Per DeepSeek Harness tool registration specification, all tools (`context_lens_focus`, `context_lens_compress_log`, `context_lens_compress_code`, `context_lens_reset`, `context_lens_stats`) must provide `output.render` returning an array of content blocks:
 ```js
@@ -151,3 +151,24 @@ const renderOutput = (_args, result) => [
 ];
 ```
 This guarantees projection compatibility with core LLM stream collectors (`contentHasImage` / `contentHasFile`).
+
+## 12. Архитектура клиентского бандла (Client Bundle Architecture & Monolith Rationale)
+
+1. **Единый браузерный бандл (`lib/client.js`)**:
+   - Клиентская половина плагина сознательно остаётся единым браузерным бандлом без физического дробления на подмодули.
+   - **Архитектурная причина**: Специфика клиентской среды исполнения DeepSeek Harness. Загрузчик плагинов монтирует единый файл, указанный в манифесте `package.json` (`dsh.client`), через функцию `window.__ModuleLoader__.load({ id, factory })`. Браузерная фабрика `factory(require)` не предоставляет относительного CommonJS-резолвера для импорта локальных файлов (`require('./submodule.js')` не поддерживается загрузчиком ядра в браузере).
+   - **Отказ от лишнего сборочного пайплайна (принцип Ponytail / YAGNI)**: Введение внешнего бандлера (esbuild, rollup, webpack) для искусственного разделения и последующей компиляции создало бы паразитные `devDependencies`, обязательный шаг сборки, артефакты в `dist/` и усложнило бы аудит исходного кода.
+2. **Внутренняя логическая декомпозиция**:
+   - Файл `lib/client.js` строго структурирован на изолированные логические секции с наглядными комментариями:
+     - `/* --- [1. LOCALES & TRANSLATIONS] --- */` (словари `en` и `zh`);
+     - `/* --- [2. CSS STYLES & THEME TOKENS] --- */` (дизайн-система `.cl-*` на системных переменных DSH);
+     - `/* --- [3. ERROR BOUNDARY & UTILITIES] --- */` (защитные границы и форматирование);
+     - `/* --- [4. STATUS PANEL COMPONENT] --- */` (виджет телеметрии, фокуса сессий и бюджета);
+     - `/* --- [5. HEADER CHIP COMPONENT] --- */` (чип в шапке диалога с поповером);
+     - `/* --- [6. SETTINGS CARD & IN-APP UPDATER] --- */` (карточка настроек плагина и механизм обновления в один клик);
+     - `/* --- [7. SIDEBAR TAB COMPONENT] --- */` (вкладка для нативной боковой панели DSH и BetterSidebar);
+     - `/* --- [8. REGISTRATION & EXPORTS] --- */` (регистрация слотов Cordis и экспорт плагина).
+3. **Соответствие лимитам DSH Store**:
+   - Фактический размер `lib/client.js` составляет **47.7 КБ** (1120 строк).
+   - Упакованный размер всего пакета (`packed`) — **36.2 КБ**.
+   - Это более чем в 7 раз меньше блокирующего порога DSH Store (**256 KiB / 262 144 байт**), что подтверждается автоматической проверкой `preflight.sh` (`FAIL = 0`).

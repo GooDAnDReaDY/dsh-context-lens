@@ -48,7 +48,6 @@ test('tracker exposes budget and history (#16/#21)', () => {
   assert.equal(hist.length, 1);
   assert.equal(hist[0].savedTokens, 75);
   assert.ok(hist[0].timestamp);
-  tracker.clearHistory();
-  assert.equal(tracker.getHistory().length, 0);
   tracker.reset();
+  assert.equal(tracker.getHistory().length, 0);
 });

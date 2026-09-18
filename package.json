@@ -16,7 +16,8 @@
     "README.md",
     "README.zh.md",
     "README.ru.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "test": "node --test test/*.test.mjs"

@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<h3>Intelligent AST Code Skeletonizer, Context Token Compressor & Log Condenser for DeepSeek Harness</h3>
+<h3>AST Code Skeletonizer, Terminal Log Condenser & Token Budget Guard for DeepSeek Harness</h3>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@goodandready/dsh-context-lens"><img src="https://img.shields.io/npm/v/@goodandready/dsh-context-lens.svg?style=for-the-badge&color=6366f1&labelColor=1e1b4b" alt="npm version"></a>
@@ -11,7 +11,7 @@
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node-20%2B-f59e0b.svg?style=for-the-badge&labelColor=451a03" alt="Node version"></a>
 </p>
 
-<!-- Showcase Catalog Button -->
+<!-- Showcase Button -->
 <p align="center">
   <a href="https://goodandready.app/"><img src="https://img.shields.io/badge/All_Author_Projects-goodandready.app-ff4500.svg?style=for-the-badge&logo=rocket&logoColor=white&labelColor=1a1a2e" alt="All Author Projects"></a>
 </p>
@@ -36,77 +36,129 @@
 
 ---
 
-## ⚡ Overview
+## ⚡ Overview & The Problem
 
-**`dsh-context-lens`** optimizes the context window and token budget of **DeepSeek Harness** agents.
+Large codebase contexts and verbose build/test logs quickly fill the LLM context window, waste token budget, slow down inference, and cause agent hallucination.
 
-Large context windows are expensive, prone to model distraction, and vulnerable to rate limits. When agents inspect multi-file codebases or run bulky test suites, thousands of tokens are wasted on boilerplate function bodies, passing test logs, and build artifacts. 
-
-`dsh-context-lens` introduces **active path focusing, AST structural code skeletonization (JS/TS/Python/Go/Rust/Java/C/C++/SQL), and fast O(n) heuristic log compression**, shrinking context consumption by **up to 85%** while keeping 100% of essential architectural interfaces and failure traces.
+**`dsh-context-lens`** solves this by providing:
+1. **Active Focus Scoping**: Keeping full fidelity for files currently being edited, while collapsing surrounding workspace files into lightweight AST skeletons.
+2. **Multi-Language AST Skeletonization**: Extracting structural types, classes, and method signatures across TypeScript, JavaScript, Python, Go, C/C++, Rust, and SQL, cutting raw code size by **70–85%**.
+3. **Intelligent Terminal Log Compression**: Stripping noisy passing test lines and build boilerplate while preserving critical error stack traces and failure windows, cutting log size by up to **90%**.
+4. **Session Token Telemetry & Budget Guard**: Live tracking of token savings with configurable budget alerts and visual indicators in the DSH Web UI.
 
 ```mermaid
 graph LR
-    subgraph RawContext [Bulky Workspace & Terminal Streams]
-        Code[📁 Multi-File Codebase: Full Function Bodies] --> LensEngine[dsh-context-lens Compression Engine]
-        Logs[📋 Test & Build Logs: Thousands of Noise Lines] --> LensEngine
+    subgraph RawContext [Raw Context Streams]
+        Code[📁 Source Code: Lengthy Implementation Details] --> LensEngine[dsh-context-lens Engine]
+        Logs[📋 Build/Test Logs: Verbose Success Noise] --> LensEngine
     end
 
-    subgraph LensEngine [Context Lens Processing Pipelines]
-        LensEngine --> Focus{Active Focus Check}
-        Focus -->|Focused Target| RawKeep[Full Implementation Preserved]
-        Focus -->|Surrounding Workspace| AST[AST Skeletonizer: Types, Classes, Signatures]
-        LensEngine --> LogFilter[Heuristic Log Condenser: Stack Traces & Errors]
+    subgraph LensEngine [Context Processing Pipeline]
+        LensEngine --> Focus{Focus Evaluator}
+        Focus -->|Focused File| RawKeep[Full Code Details Retained]
+        Focus -->|Surrounding Workspace| AST[AST Skeletonizer: Signatures & Types]
+        LensEngine --> LogFilter[Log Condenser: Stack Traces & Errors Only]
     end
 
-    subgraph Savings [Token Economy & Agent Reasoning]
-        AST --> Agent[🤖 DSH Agent: Ultra-Compact High-Speed Context]
+    subgraph Output [Optimized Agent Context]
+        AST --> Agent[🤖 DSH Agent Context: Compact High-Value Prompt]
         RawKeep --> Agent
         LogFilter --> Agent
-        Agent --> Tracker[📊 Live Token Budget Savings Tracker]
+        Agent --> Tracker[📊 Live Token Telemetry & Budget Guard]
     end
 
     style RawContext fill:#1e1e2e,stroke:#89b4fa,stroke-width:2px,color:#cdd6f4
     style LensEngine fill:#181825,stroke:#cba6f7,stroke-width:2px,color:#cdd6f4
-    style Savings fill:#11111b,stroke:#a6e3a1,stroke-width:2px,color:#cdd6f4
+    style Output fill:#11111b,stroke:#a6e3a1,stroke-width:2px,color:#cdd6f4
 ```
 
 ---
 
-## ✨ Key Capabilities & Modules
+## ✨ Full Feature Breakdown
 
-### 1. 🧬 Multi-Language AST Code Skeletonizer (`lib/ast/skeletonizer.js`)
-* Automatically extracts structural interfaces, function signatures, classes, types, and exports across **TypeScript, JavaScript, Python, Go, Rust, and Java**;
-* Supports `pub async fn`, `async fn`, `pub(crate)` and `pub(super)` in Rust;
-* Retains JSDoc, docstrings, and structural comments preceding definitions;
-* Drops internal function implementations, loops, and repetitive boilerplate while preserving indentation and export declarations;
-* Allows the agent to understand entire multi-package repository architectures without loading tens of thousands of implementation tokens.
+### 1. 🧬 Multi-Language AST Structural Skeletonizer
+* **Supported Languages**: TypeScript, JavaScript, Python, Go, C/C++, Rust, and SQL DDL.
+* **Structural Preservation**: Retains imports, classes, structs, interfaces, exported types, function signatures, and doc comments while discarding inner implementation bodies.
+* **Multiline Signature Support**: Seamlessly accumulates complex multiline generic arguments, return types, and parameter lists up to block delimiters.
+* **Pure Regex Implementation**: Zero heavy native dependencies or binary parser overhead; runs lightning-fast across any platform.
 
-### 2. 🗜️ Fast Heuristic Log Condenser (`lib/compression/log-compressor.js`)
-* High-performance $O(n)$ heuristic line filter for test runners and build tools (Jest, Vitest, Pytest, Go test, NPM, Webpack, Cargo, Maven/Gradle);
-* Strips terminal ANSI escape color sequences before evaluating regex patterns;
-* Automatically filters out passing test noise (`PASS`, `✓`, `ok`) and build notices;
-* Retains critical error lines, stack traces, assertion failures (`Expected ... Received ...`), and failure context windows;
-* 3 Aggressiveness Modes: `raw`, `balanced`, and `aggressive`.
+### 2. 📋 Heuristic Test & Build Log Condenser
+* **Supported Test Runners & Tools**: Jest, Vitest, Pytest, Go test, Cargo, Webpack, Vite, TSC, Maven, Gradle.
+* **Targeted Extraction**: Identifies and preserves critical error messages, stack traces, assertion differences (`Expected ... Received ...`), and failure context windows.
+* **3 Aggressiveness Modes**:
+  - `raw`: Removes simple noise lines while keeping general execution order.
+  - `balanced`: Preserves failure sections with surrounding context windows (default).
+  - `aggressive`: Extracts strictly error lines and stack frames.
+* **ANSI Stripping**: Cleans terminal escape codes and color formatting before processing.
 
 ### 3. 🎯 Active Path Focus Scoping (`context_lens_focus`)
-* Dynamically sets a list of active files or directories currently being edited;
-* Files outside the focus list are automatically presented to the agent as lightweight AST skeletons.
+* Allows designating specific files or folders as active working targets for the current task.
+* Files inside focus remain uncompressed; non-focused dependencies are automatically served as structural skeletons.
+* Focus state is strictly scoped per session (`sessionId`) and can be inspected or cleared instantly via UI or API.
 
-### 4. 📊 Token Savings Tracking & Dashboard (`lib/tokens/tracker.js` & `lib/client.js`)
-* Measures exact token counts before and after compression;
-* Calculates cumulative session token savings and displays live efficiency percentage badges in the DSH interface;
-* Enforces Token Budget Guard limits with alert warnings when exceeding 90% budget.
+### 4. 📊 Token Savings Tracking & Budget Telemetry
+* Calculates exact tokens before and after compression using accurate token estimation.
+* Tracks cumulative tokens saved, compression ratio, and session budget percentage.
+* Configurable warning threshold (`budgetAlertPercent`) dynamically alerts when the session budget approaches depletion.
+
+### 5. 🖥️ Visual Surfaces & Dual Sidebar Integration
+Context Lens shares the unified `.cl-*` design language and `--dsw-alias-*` token system with `dsh-clinebot`:
+* **Conversation Header Chip**: Mounted in `conversation.session.header.utilities` (`order: 7`). Always displays efficiency badges (`◐ Lens`, `◐ <N>%`, or `⚠` alert) with an interactive dropdown Popover showing savings details and recent operations.
+* **Dual Sidebar Compatibility**: Supports both native DeepSeek Harness right sidebar (`ctx.sidebarRightTabs` + `sidebar.right.pane.tab` slot) and legacy `dsh-better-sidebar` with non-conflicting IDs.
+* **ErrorBoundary Protection**: Every UI component (`PluginCard`, `LensTab`, `StatusPanel`) is isolated inside React error boundaries with instant retry buttons, preventing parent UI crashes.
+* **One-Click In-App Updater**: Settings card displays live version checks against npm with a single-click update trigger.
 
 ---
 
-## 🛠️ Agent Tools Reference (4 Tools)
+## 🛠️ Agent Tools Reference (5 Tools)
+
+All tools strictly conform to the DeepSeek Harness tool specification by providing `output.render` returning structured `ContentBlock[]` arrays (`[{ type: 'text', text: ... }]`), ensuring 100% session stability with core LLM stream processors.
 
 | Tool Name | Parameters | Description |
 |---|---|---|
-| `context_lens_focus` | `paths: string[]`, `maxDepth?: number` | Designates active focus files/folders; collapses surrounding workspace into AST skeletons |
-| `context_lens_compress_log` | `text: string` *(or `log`)*, `mode?: "raw"\|"balanced"\|"aggressive"`, `maxLines?: number`, `auto?: boolean` | Condenses terminal/test outputs, keeping only stack traces and failure windows |
-| `context_lens_compress_code` | `code: string`, `language?: string`, `maxDepth?: number`, `filePath?: string` | Generates a clean structural AST skeleton from raw source code |
-| `context_lens_stats` | *(none)* | Returns real-time cumulative token savings, history, and budget status |
+| `context_lens_focus` | `paths: string[]`, `sessionId?: string` | Sets active focus files/folders for the session; collapses surrounding workspace into AST skeletons |
+| `context_lens_compress_log` | `text: string` *(or `log`)*, `mode?: "raw"|"balanced"|"aggressive"`, `maxLines?: number`, `auto?: boolean` | Condenses terminal and test outputs, keeping only stack traces and failure windows |
+| `context_lens_compress_code` | `code: string`, `language?: string`, `maxDepth?: number`, `filePath?: string`, `sessionId?: string` | Generates a clean structural AST skeleton from raw source code |
+| `context_lens_track` | `sessionId?: string` | Returns real-time cumulative token savings, history, and budget status for the session |
+| `context_lens_reset` | `sessionId?: string` | Resets token tracker counters and compression history at the start of new tasks |
+
+---
+
+## 🔌 HTTP API Reference
+
+| Endpoint | Method | Security Checks | Description |
+|---|---|---|---|
+| `/dsh-context-lens/status` | `GET` | Open (safe read) | Returns session token savings stats, active focus paths, and compression history |
+| `/dsh-context-lens/clear-focus` | `POST` | Loopback / Same-Origin | Clears focused paths for the specified session (rejects GET with 405) |
+| `/dsh-context-lens/compress-preview` | `POST` | Loopback / Same-Origin | Preview log compression with 256KB body size limit and `maxLines` clamping (1–5000) |
+| `/api/dsh-context-lens/update` | `GET`, `POST` | Loopback + Security Header | In-app plugin updater checking npm registry and executing safe background updates |
+
+---
+
+## ⚙️ Configuration Reference (`settings.yaml`)
+
+Settings can be modified via `settings.yaml` or directly in the DSH Web UI under **Settings → Plugins → Context Lens**.
+
+```yaml
+dsh-context-lens:
+  compressionMode: balanced        # Log compression mode: 'raw', 'balanced', or 'aggressive'
+  astSkeletonMaxDepth: 3          # Maximum depth level for AST signature traversal (1..10)
+  tokenSavingsTracking: true      # Track and display live token savings
+  autoCompressThreshold: 4000     # Auto-compression character threshold (0 to disable)
+  budgetLimit: 100000             # Session token budget limit
+  budgetAlertPercent: 90          # Budget percentage threshold triggering warning badge (50..99)
+  autoCollapse: true              # Display warning in UI when budget is nearly exhausted
+```
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `compressionMode` | `string` | `balanced` | Default log compression aggressiveness (`raw`, `balanced`, `aggressive`) |
+| `astSkeletonMaxDepth` | `number` | `3` | Maximum nesting depth for AST signature parsing (1 to 10) |
+| `tokenSavingsTracking` | `boolean` | `true` | Track token savings before/after compression |
+| `autoCompressThreshold` | `number` | `4000` | Auto-compress terminal logs exceeding this character length (0 to disable) |
+| `budgetLimit` | `number` | `100000` | Total token budget limit allocated per session |
+| `budgetAlertPercent` | `number` | `90` | Budget alert threshold percentage triggering warnings (50 to 99) |
+| `autoCollapse` | `boolean` | `true` | Display low-budget warning badge in settings card and header chip |
 
 ---
 
@@ -116,99 +168,11 @@ graph LR
 dsh plugin --profile web add @goodandready/dsh-context-lens
 ```
 
-> [!IMPORTANT]
-> Restart DSH Web UI after installation (`systemctl --user restart dsh-web`) to activate context compression tools.
+> [!TIP]
+> After installation, reload the DSH Web UI or restart the service (`systemctl --user restart dsh-web`) to activate context compression tools.
 
 ---
-
-## ⚙️ Configuration Reference (`settings.yaml`)
-
-```yaml
-dsh-context-lens:
-  compressionMode: balanced        # 'raw', 'balanced', or 'aggressive'
-  astSkeletonMaxDepth: 3          # Maximum depth level for AST signature traversal (1..10)
-  tokenSavingsTracking: true      # Track and display live token savings
-  autoCompressThreshold: 4000     # Auto-compression character threshold (0 to disable)
-  budgetLimit: 100000             # Session token budget limit
-  autoCollapse: true              # Auto-collapse UI when budget is nearly exhausted
-```
-
----
-
-## 📝 Version History
-
-### v0.1.10
-* **Fix**: Register session header chip in `conversation.session.header.utilities` (`order: 7`).
-* **Fix**: Ensure chip is always visible (`◐ Lens` on initial session, `◐ <N>%` when savings available, `⚠` on low budget).
-* **Feature**: Interactive dropdown Popover on chip click: token savings breakdown, budget progress bar, recent operations, and refresh button.
-
-### v0.1.9
-* **Fix**: Remove obsolete kernel modules from client injects for DSH 0.1.2-rc.1 compatibility.
-
-### v0.1.8
-* **Fix**: Support both `text` and `log` parameter names in `context_lens_compress_log`.
-* **Fix**: Cross-platform path resolution in unit tests on Windows (`fileURLToPath`).
-* **Fix**: Dynamic propagation of `budgetLimit` configuration into token tracker.
-* **Fix**: ANSI terminal escape sequence stripping for colored logs.
-* **Fix**: Expanded Rust syntax support (`pub async fn`, `pub(crate)`) and proper `#` comment prefix for Python.
-
----
-
-
-## Changed in v0.1.18
-
-- **Critical Fix (#71, GH #2)**: Conformed `output.render` to DeepSeek Harness core contract by returning `ContentBlock[]` (`[{ type: 'text', text: ... }]`). Prevents irreversible DSH session poisoning caused by `TypeError: content.some is not a function` in `@deepseek-ai/dsh-llm`.
-- **Security & Reliability (#62, #63, #70)**: Hardened HTTP endpoints (`/clear-focus`, `/compress-preview`, `/status`): strictly requires `POST` on write actions, enforces loopback/same-origin trust checks, caps body size to 256KB (413 on exceed), validates `maxLines` (1-5000), and handles malformed session queries with clear 400 responses.
-- **One-Click In-App Updater (#61)**: Added canonical plugin updater module (`lib/updater.js`) with `/api/dsh-context-lens/update` endpoint and an in-app update UI banner with one-click update button in the settings card.
-- **Settings & Lifecycle (#64, #66)**: Injected `settingsScope` directly into client plugin dependencies and removed foreign `lanSettings` fallback. Wrapped settings and locale registrations in `ctx.effect` with disposable cleanups.
-- **UI & Theme Alignment (#67, #68)**: Implemented smooth vector SVG 14x14 chevron with 180° rotation animation and replaced hardcoded colors with `--dsw-alias-*` theme tokens for seamless light/dark mode presentation.
-- **Repository Hygiene (#65)**: Purged internal agent artifacts (`AGENTS.md`, `index.md`, `docs/plans/`) from tracked git tree and added denylist to `.gitignore`.
 
 ## 📄 License
 
 MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)
-
-## Changed in v0.1.11
-
-Audit fixes (#33–#47, #18):
-
-- Auto-compress no longer forces `balanced`; uses configured `compressionMode`.
-- `budgetLimit` stops token counting after the limit (matches settings description).
-- Focus state is per-session (`sessionId`), not process-global.
-- Settings card exposes `budgetLimit`, `autoCollapse`, `autoCompressThreshold`; low-budget shows a warning instead of force-closing the card.
-- Client `betterSidebar` inject is optional; preview uses server `/dsh-context-lens/compress-preview`.
-- Python imports kept in skeletons; Java locals no longer mistaken for signatures.
-- Shared `estimateTokens` helper; unused `dsh-credentials` peer removed.
-
-## Changed in v0.1.12
-
-#43: extract shared `StatusPanel` used by LensTab and HeaderChip popover (budget bar, history, refresh).
-
-## Changed in v0.1.13
-
-- **Fix (#50)**: Guard optional `betterSidebar` tab registration via `ctx.inject(['betterSidebar'], ...)` instead of direct property access on Cordis context proxy, resolving `cannot get property "betterSidebar" without inject` on client boot.
-- **Fix (#50)**: Safely guard `_ctx.settingsScope` access in `PluginCard` with try/catch to prevent proxy property errors.
-- **Test**: Added regression test suite simulating strict Cordis Context Proxy behavior.
-
-## Changed in v0.1.15
-
-- **Feature (#54)**: Support native DSH right sidebar (`ctx.sidebarRightTabs` + `sidebar.right.pane.tab` slot) introduced in DSH 0.1.5-alpha.1.
-- **Compatibility (#54)**: Preserve legacy `dsh-better-sidebar` integration with deterministic, non-conflicting IDs (`@goodandready/dsh-context-lens` vs `dsh-context-lens:tab`).
-- **Resilience (#54)**: Clean boot and graceful fallback across all 4 layouts (Native only, Legacy only, Both active, Neither active).
-- **Tests (#54)**: Added comprehensive test matrix in `test/sidebar-matrix-54.test.mjs`.
-
-## Changed in v0.1.14
-
-- **Fix (#52)**: Multiline AST signature parsing in `skeletonizer.js` for TypeScript, JavaScript, Rust, and Go with complex parameter types and return annotations.
-- **Feature (#52)**: Registered `context_lens_reset` tool to allow resetting tracker statistics and history at the start of new tasks.
-- **Quality & UX (#52)**: Dynamic RU/EN locale detection in `HeaderChip`, `LensTab`, and `StatusPanel` via `ctx.locale` for seamless UI integration.
-- **Perf & Stability (#52)**: Adaptive polling in `HeaderChip` pausing on hidden tabs (`visibilitychange`) and polling actively (4s) only when popover is open.
-- **Reliability (#52)**: Atomic settings save (`scope.patch` / `scope.setAll`) in `PluginCard` with graceful fallback.
-
-### UI & Styling System (v0.1.16+)
-
-Context Lens shares its visual language and component architecture with `dsh-clinebot`:
-- **Native Design System**: 100% theme integration using `--dsw-alias-*` tokens.
-- **Resilient UI Surfaces**: Every component (`PluginCard`, `LensTab`, `StatusPanel`) is protected by an `ErrorBoundary` with instant retry capability.
-- **Reactive Settings**: Live updates via `scope.subscribe()` and zero-delay reads via `scope.getSnapshot()`.
-- **Adaptive Telemetry**: Popover and tab display metric cards for tokens saved, percentage reduced, and live budget utilization.

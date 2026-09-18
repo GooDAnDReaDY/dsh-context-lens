@@ -5,6 +5,21 @@ All notable changes to `@goodandready/dsh-context-lens` will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.21] - 2026-09-19
+
+### Fixed
+- **Settings reachable again**: the card registered into `settings.plugin.item`, a
+  slot the current DSH core (0.1.6-alpha.2) no longer renders, so the settings were
+  unreachable. The surface now registers into the Plugins page row seat
+  `plugins.row.config`, keyed `@goodandready/dsh-context-lens#dsh-context-lens`
+  (`rowConfigKey(package, rowId)`): the plugin's row gains a configure control whose
+  page is the settings form (`view: 'page'`, without our header and card chrome —
+  the host page draws the title, icon, crumb and padding) plus a one-line state for
+  `view: 'summary'`. The legacy seat stays registered as a fallback for older cores.
+- Guard `test/row-seat.test.mjs`: row key against `package.json` and
+  `cordis.patch.yml`, seat order (row seat first, legacy seat kept), bare page
+  render and no duplicate `settings.section`.
+
 ## [0.1.20] - 2026-09-18
 
 ### Fixed

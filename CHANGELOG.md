@@ -5,6 +5,17 @@ All notable changes to `@goodandready/dsh-context-lens` will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.19] - 2026-09-18
+
+### Fixed
+- **UI Slot Registration Error Diagnostics (#76)**: Replaced silent/empty `catch` blocks in `lib/client.js` for `sidebar.right.pane.tab`, `conversation.session.header.utilities`, and `betterSidebar` slot registrations with descriptive `console.warn` diagnostic logs. Added explicit fallback intention comments for locale snapshot handling.
+
+### Refactored
+- **Tracker Dead Code Cleanup (#77)**: Removed redundant, test-only `clearHistory` export from `lib/tokens/tracker.js`. History clearing is canonically and safely handled by `reset()`.
+
+### Documentation
+- **Keep a Changelog Standardization (#74)**: Extracted chronological release notes (`## Changed in v...`) from `README.md`, `README.ru.md`, and `README.zh.md` into centralized `CHANGELOG.md`. Consolidated all product feature documentation into comprehensive thematic sections. Included `CHANGELOG.md` in package distribution manifest (`package.json` files list).
+
 ## [0.1.18] - 2026-09-17
 
 ### Fixed

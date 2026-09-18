@@ -154,3 +154,13 @@ test('#61: updater module does not pass --config.minimumReleaseAge=0 and uses /a
   assert.ok(indexSrc.includes("endpoint: '/api/dsh-context-lens/update'"));
   assert.ok(clientSrc.includes("fetch('/api/dsh-context-lens/update'"));
 });
+// #76: No silent/empty catch blocks in lib/client.js
+test('#76: lib/client.js contains zero empty catch blocks and logs slot registration failures', () => {
+  const emptyCatchRegex = /catch\s*\([^)]*\)\s*\{\s*(\s*void\s+[a-zA-Z0-9_$]+;\s*)?\}/g;
+  const matches = [...clientSrc.matchAll(emptyCatchRegex)];
+  assert.equal(matches.length, 0, `Unmarked empty catch blocks found in client.js: ${JSON.stringify(matches.map(m => m[0]))}`);
+  assert.ok(clientSrc.includes("[dsh-context-lens] sidebar.right.pane.tab inject failed"));
+  assert.ok(clientSrc.includes("[dsh-context-lens] registerPaneTab direct register fallback failed"));
+  assert.ok(clientSrc.includes("[dsh-context-lens] utilities inject failed, falling back to direct register"));
+  assert.ok(clientSrc.includes("[dsh-context-lens] headerChipRegister fallback failed"));
+});

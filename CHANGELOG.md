@@ -5,6 +5,19 @@ All notable changes to `@goodandready/dsh-context-lens` will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.24] - 2026-09-24
+
+### Performance
+- **Optimized log auto-compression**: replaced string array allocation `split('\n').length > 100` with zero-allocation early-exit `hasAtLeastLines(text, 101)` scan, delivering ~55x faster checks on large log outputs (#85).
+- **Fast-path ANSI stripping**: added immediate fast-path return in `cleanAnsi` for strings without `\u001b` and cached cleaned lines during log compression to eliminate duplicate regex execution (#88).
+
+### Security
+- **Hardened `/dsh-context-lens/status` route**: enforced HTTP `GET` method (`405 Method Not Allowed` on other methods) and verified trusted source via `isTrustedRequest` (`403 Forbidden` on untrusted origins), closing cross-site telemetry leak (#87).
+
+### Fixed
+- **Prevented session memory leak**: `clearFocus(key)` now explicitly deletes the session key from `focusBySession`, and enforced a maximum capacity limit (`MAX_FOCUS_SESSIONS = 500`) with LRU eviction (#86).
+- **Sanitized focus paths and fixed matching**: filtered out empty and whitespace strings in `context_lens_focus`, and implemented strict path segment matching in `isPathFocused()` to prevent false compression bypass (#89).
+
 ## 0.1.23
 
 ### Fixed

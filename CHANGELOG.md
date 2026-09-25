@@ -5,6 +5,11 @@ All notable changes to `@goodandready/dsh-context-lens` will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.25] - 2026-09-25
+
+### Fixed
+- **SettingsForms modern API adapter (#66)**: removed legacy call to nonexistent `sctx.settings.register` preventing crash on DSH 0.1.7-rc.1 core. Implemented `SettingsForms` adapter with `configure({ auto: false })`, live reading via `describe()` / `get()`, dynamic updates via `settings/document-updated`, and full cleanup on effect disposal.
+
 ## [0.1.24] - 2026-09-24
 
 ### Performance

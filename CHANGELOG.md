@@ -5,6 +5,15 @@ All notable changes to `@goodandready/dsh-context-lens` will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.26] - 2026-09-26
+
+### Changed
+- **Narrowed to Semantic Compression (#96)**: Delegated context budgeting, token counting, tool result pruning, and long result spilling to DSH core (>= 0.1.5-rc.3). Removed lib/tokens/, session budget calculations, and token savings telemetry.
+- **Consolidated Agent Tools (#96)**: Streamlined tool footprint to exactly two tools:
+  - context_lens_code: multi-language AST code skeletonization and session path focus management (ction: 'skeleton' | 'focus' | 'get_focus' | 'clear_focus').
+  - context_lens_log: intelligent test and build log condenser (preserving failures, stack traces, and test summary; collapses passing runs to concise summary; discriminates test/build logs from plain commands in auto mode).
+- **Streamlined UI & Removed Dead Routes (#96)**: Removed duplicate sidebar tabs, conversation utilities header chip, self-updater, and obsolete HTTP endpoints (/status, /compress-preview, /clear-focus). Retained clean settings card in DSH Settings with client-side interactive preview.
+
 ## [0.1.25] - 2026-09-25
 
 ### Fixed

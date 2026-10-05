@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.29
+
+### Fixed
+- **DSH 0.2.0-rc.2 List Slot Compatibility (#108, GH #3)**: Starting with DSH 0.2.0-rc.2, `plugins.item` became a list slot requiring `options.id`. Provided both `options.id` and `options.key` for `plugins.item` for dual compatibility, kept `options.key` for keyed slot `plugins.row.config`, and wrapped slot registration inside the `inject` callback with `try / catch` to eliminate uncaught boot exceptions.
+
+## 0.1.28
+
+### Fixed
+- **Peer gate on DSH 0.2.0-rc.1** (#58): DSH skips a profile bundle whose `peerDependencies` exclude the running version, so this plugin was absent from the profile with no error in the UI. Every `@deepseek-ai/dsh-*` peer now names both the 0.1.7-rc.2 and 0.2.0-rc.1 lines, because semver does not admit a prerelease of the next minor into a range that does not name it.
+
+## 0.1.27
+
+### Fixed
+- **Peer gate on DSH 0.2.0-rc.1** (#58): DSH skips a profile bundle whose `peerDependencies` exclude the running version, so this plugin was absent from the profile with no error in the UI. Every `@deepseek-ai/dsh-*` peer now names both the 0.1.7-rc.2 and 0.2.0-rc.1 lines, because semver does not admit a prerelease of the next minor into a range that does not name it.
+
 All notable changes to `@goodandready/dsh-context-lens` will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),

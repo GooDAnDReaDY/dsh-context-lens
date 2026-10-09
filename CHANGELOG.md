@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.30
+
+### Fixed
+- **Schemastery Volatile Boxes Unwrapped (#102)**: Ensured `plainConfig` wraps initial `readConfig` and effect teardown assignments, preventing raw Schemastery Volatile boxes `{ get: [Function] }` from reaching tool consumers (`astSkeletonMaxDepth`, `compressionMode`, `autoCompressThreshold`) and preventing `NaN` / `[object Object]` comparisons.
+- **Active Live Settings Cache Refresh (#103)**: Implemented local `cachedLiveSettings` that actively refreshes upon `settings/document-updated` events, eliminating empty listener stub and avoiding repeated synchronous `describe()` lookups on each tool execution.
+- **Pruned Dead Code (#114, #105)**: Removed unreachable `else if (typeof sctx.settings.get === 'function')` fallback in `readLiveSettings` and pruned unused module-level variable `lastActiveSession` and its assignments in `lib/tools.js`.
+
+
 ## 0.1.29
 
 ### Fixed

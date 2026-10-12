@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.31
+
+### Fixed
+- **Client ConfigForm Read and Mutation Protocol (#111)**: Realigned `lib/client.js` with DSH 0.2 `ConfigForm` lifecycle contract. Reads settings from `snap.value` (with backwards compatibility fallback for `snap.values`), isolates the 3 schema fields (`compressionMode`, `astSkeletonMaxDepth`, `autoCompressThreshold`), and writes updates per-field via `scope.mutate([{ type: 'set', key, value }])` or `scope.set(key, value)`, eliminating the non-existent `scope.update` call and preventing schema pollution under the plugin namespace.
+- **Accordion Accessibility and Keyboard Navigation (#112)**: Replaced non-interactive `div` accordion header with a semantic `<button type="button">`, adding `aria-expanded` and `aria-controls` referencing the unique body ID (`cl-body-${NS}`). Added `:focus-visible` styling for accessible keyboard navigation.
+- **DSH Canonical Theme Tokens (#113)**: Replaced 6 non-existent theme variables (`--dsw-alias-border-primary`, `--dsw-alias-btn-primary-bg`, `--dsw-alias-accent-primary`, `--dsw-alias-btn-primary-color`, `--dsw-alias-text-contrast`, `--dsw-alias-state-error-bg`) with canonical DSH tokens (`--dsw-alias-border-l1`/`l2`, `--dsw-alias-brand-primary`/`invert`, `--dsw-alias-color-danger-bg`/`color-mix`).
+
 ## 0.1.30
 
 ### Fixed

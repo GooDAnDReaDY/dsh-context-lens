@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.32
+
+### Fixed
+- **Dead Test-Only Exports Pruned (#115)**: Removed `resetFocusBySession` and `getFocusBySessionSize` from `lib/tools.js`. Test suites now interact solely with the public `clearFocus()` API and verify true LRU cache behavior instead of inspecting private state.
+- **Session Focus Isolation & Runtime Metadata (#104)**: Documented `focusBySession` LRU cache architecture and lifecycle semantics. Extended `sessionKey` resolution to extract session identifiers from runtime execution metadata (`meta.conversationId`, `meta.conversation_id`, and `meta.session.sessionId`), preventing unintended fallback to the shared `'__default__'` session bucket. Implemented proper LRU access refreshes (`delete` + `set`) in `getFocus()`.
+
 ## 0.1.31
 
 ### Fixed

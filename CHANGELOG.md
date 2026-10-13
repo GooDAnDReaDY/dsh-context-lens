@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.33
+
+### Fixed
+- **Ghost Theme Tokens Replaced with Canonical DSH Tokens (#122)**: Replaced truncated `--dsw-alias-label-primary-invert` with canonical `--dsw-alias-label-primary-inverted`. Removed ghost token references `--dsw-alias-color-danger-bg` and `--dsw-alias-state-error-border` from `.cl-error-box` styles, normalizing background and border definitions to canonical `color-mix` expressions based on `--dsw-alias-state-error-primary`. Added automated theme guard validating all client CSS tokens against the canonical DSH design system.
+
 ## 0.1.32
 
 ### Fixed

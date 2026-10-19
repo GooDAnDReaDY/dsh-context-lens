@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.34
+
+### Fixed
+- **Relative Focus Pattern Matching for Absolute File Paths (#125)**: Resolved an issue where relative focus patterns and directory names (e.g. `src`, `lib/foo.ts`, `./src`, `/src`) failed to match absolute file paths (e.g. `/repo/src/a.js`) in `context_lens_code`, causing focused files to be skeletonized. Implemented boundary-checked directory segment matching and leading `./` normalization in `lib/tools.js` with zero false positives for partial folder collisions (`my-src` vs `src`).
+
 ## 0.1.33
 
 ### Fixed

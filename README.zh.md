@@ -79,7 +79,7 @@ graph LR
 
 | 工具名 | 操作模式 | 参数 | 描述 |
 |---|---|---|---|
-| `context_lens_code` | `action: "skeleton"` (默认) | `code`, `language?`, `maxDepth?`, `filePath?`, `sessionId?` | 从源代码生成 AST 骨架（若文件处于焦点内则返回完整代码） |
+| `context_lens_code` | `action: "skeleton"` (默认) | `filePath?`, `code?`, `language?`, `maxDepth?`, `sessionId?` | 直接从 `filePath` 读取并生成 AST 骨架（无需预先读取完整文件，节省上下文），或基于传入的 `code` 处理。若处于焦点内则返回完整代码 |
 | `context_lens_code` | `action: "focus"` | `paths: string[]`, `sessionId?` | 设置当前会话的焦点路径列表 |
 | `context_lens_code` | `action: "get_focus"` | `sessionId?` | 获取当前会话的焦点状态 |
 | `context_lens_code` | `action: "clear_focus"` | `sessionId?` | 清空当前会话的焦点路径 |
@@ -95,7 +95,7 @@ graph LR
 |---|---|---|---|
 | `compressionMode` | `string` | `'balanced'` | 日志压缩模式 (`raw`, `balanced`, `aggressive`) |
 | `astSkeletonMaxDepth` | `number` | `3` | AST 骨架最大嵌套深度 |
-| `autoCompressThreshold` | `number` | `4000` | 自动压缩触发字符阈值（设为 0 禁用） |
+| `autoCompressThreshold` | `number` | `4000` | 调用 `context_lens_log (auto: true)` 时自动压缩触发的字符阈值（设为 0 禁用） |
 
 ---
 

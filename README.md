@@ -47,15 +47,15 @@
 
 ```mermaid
 graph LR
-    subgraph RawContext [Raw Context Streams]
-        Code[📁 Source Code: Lengthy File Bodies] --> Lens[dsh-context-lens Semantic Engine]
-        Logs[📋 Test/Build Output: Verbose Stream] --> Lens
+    subgraph AgentInvocation [Agent Tool Invocations]
+        CodeTool["context_lens_code(filePath / code)"] --> Lens[dsh-context-lens Semantic Engine]
+        LogTool["context_lens_log(text, auto: true)"] --> Lens
     end
 
     subgraph Lens [Semantic Processing]
         Lens --> Focus{Path Focus Check}
-        Focus -->|File in Focus| FullCode[Retain Full Implementation]
-        Focus -->|Surrounding Files| AST[AST Skeletonizer: Signatures & Types]
+        Focus -->|File in Focus| FullCode[Direct Read: Full Implementation]
+        Focus -->|Surrounding Files| AST[Direct Read / AST Skeletonizer]
         Lens --> LogCompress[Log Condenser: Errors, Stack & Summary]
     end
 
@@ -63,10 +63,9 @@ graph LR
         FullCode --> Agent[🤖 AI Agent Context]
         AST --> Agent
         LogCompress --> Agent
-        Agent --> Core[⚙️ DSH Core Pruner & Spill Policy]
     end
 
-    style RawContext fill:#1e1e2e,stroke:#89b4fa,stroke-width:2px,color:#cdd6f4
+    style AgentInvocation fill:#1e1e2e,stroke:#89b4fa,stroke-width:2px,color:#cdd6f4
     style Lens fill:#181825,stroke:#cba6f7,stroke-width:2px,color:#cdd6f4
     style Output fill:#11111b,stroke:#a6e3a1,stroke-width:2px,color:#cdd6f4
 ```
@@ -104,7 +103,7 @@ All tools strictly conform to the DeepSeek Harness tool specification by providi
 
 | Tool Name | Action / Mode | Parameters | Description |
 |---|---|---|---|
-| `context_lens_code` | `action: "skeleton"` (default) | `code`, `language?`, `maxDepth?`, `filePath?`, `sessionId?` | Generates a clean structural AST skeleton from raw source code (or returns full code if file is in session focus) |
+| `context_lens_code` | `action: "skeleton"` (default) | `filePath?`, `code?`, `language?`, `maxDepth?`, `sessionId?` | Generates a clean structural AST skeleton directly from `filePath` (reading file without preliminary `read_file` token waste) or from `code`. If file is in active session focus, returns full implementation |
 | `context_lens_code` | `action: "focus"` | `paths: string[]`, `sessionId?` | Sets active focus file paths or patterns for the current session |
 | `context_lens_code` | `action: "get_focus"` | `sessionId?` | Retrieves active focus paths for the session |
 | `context_lens_code` | `action: "clear_focus"` | `sessionId?` | Clears focus paths for the session |
@@ -120,7 +119,7 @@ Configured via the DSH Settings page (`plugins.row.config` / `plugins.item`):
 |---|---|---|---|
 | `compressionMode` | `string` | `'balanced'` | Log compression aggressiveness (`raw`, `balanced`, `aggressive`) |
 | `astSkeletonMaxDepth` | `number` | `3` | Max depth for AST skeleton generation |
-| `autoCompressThreshold` | `number` | `4000` | Character threshold for auto-compressing test/build logs (0 to disable) |
+| `autoCompressThreshold` | `number` | `4000` | Character threshold for auto-compressing test/build logs when invoking `context_lens_log` with `auto: true` (0 to disable) |
 
 ---
 

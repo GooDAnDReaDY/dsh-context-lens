@@ -79,7 +79,7 @@ graph LR
 
 | Инструмент | Действие / Режим | Параметры | Описание |
 |---|---|---|---|
-| `context_lens_code` | `action: "skeleton"` (по умолчанию) | `code`, `language?`, `maxDepth?`, `filePath?`, `sessionId?` | Генерирует структурный AST-скелет из кода (или возвращает полный код, если файл находится в фокусе сессии) |
+| `context_lens_code` | `action: "skeleton"` (по умолчанию) | `filePath?`, `code?`, `language?`, `maxDepth?`, `sessionId?` | Генерирует структурный AST-скелет напрямую из `filePath` (читая файл с диска без предварительного `read_file`) или переданного `code`. Если файл в фокусе сессии, возвращает полный код |
 | `context_lens_code` | `action: "focus"` | `paths: string[]`, `sessionId?` | Задает список путей активного фокуса для текущей сессии |
 | `context_lens_code` | `action: "get_focus"` | `sessionId?` | Возвращает текущее состояние фокуса для сессии |
 | `context_lens_code` | `action: "clear_focus"` | `sessionId?` | Очищает пути фокуса сессии |
@@ -95,7 +95,7 @@ graph LR
 |---|---|---|---|
 | `compressionMode` | `string` | `'balanced'` | Агрессивность сжатия логов (`raw`, `balanced`, `aggressive`) |
 | `astSkeletonMaxDepth` | `number` | `3` | Максимальная глубина вложенности AST-скелета |
-| `autoCompressThreshold` | `number` | `4000` | Порог в символах для автосжатия логов тестов/сборки (0 для отключения) |
+| `autoCompressThreshold` | `number` | `4000` | Порог в символах для автосжатия логов тестов/сборки при вызове `context_lens_log` с `auto: true` (0 для отключения) |
 
 ---
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.35
+
+### Added
+- **Direct File Reading via `filePath` in `context_lens_code` (#128)**: Enabled `context_lens_code` to directly read files from disk when `code` is omitted, eliminating token-costly redundant `read_file` roundtrips before skeletonization. Added file size limit (`MAX_DIRECT_READ_BYTES` = 1 MiB), directory guard, and automated language detection (`detectLanguageFromPath`).
+
+### Fixed
+- **Client CSS Fallback Theme Tokens (#128)**: Removed hardcoded `#ffffff` fallback in `.cl-btn-primary` within `lib/client.js`, strictly adhering to canonical DSH theme tokens and clearing the preflight warning.
+
+### Documentation
+- **On-Demand Architecture & Settings Clarification (#128)**: Realigned `README.md` (EN, RU, ZH) with on-demand tool execution model, documented direct file reading parameters, and clarified `autoCompressThreshold` usage in `context_lens_log`. Documented Section 11 *On-Demand Semantic Execution & Direct File Reading Contract* in `docs/design/DESIGN.md`.
+
 ## 0.1.34
 
 ### Fixed

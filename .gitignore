@@ -7,10 +7,7 @@ credentials.yaml
 .worktrees/
 *.log
 
-# Internal service and agent workflow files (dhs-plugin-release-workflow denylist)
-AGENTS.md
-index.md
-deploy.sh
+# Local scratch/planning artifacts
 release-notes.md
 .planning/
 openwiki/

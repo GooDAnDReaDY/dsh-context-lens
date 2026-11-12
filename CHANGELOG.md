@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.36
+
+### Fixed
+- **Plugin Manager Slot Contract & `ctx` Forwarding (#133)**: Passed `locale`, `inject: () => ({ ctx })`, localized `label`, and wrapped `PluginCard` props forwarding in `plugins.item` and `plugins.row.config` registrations, ensuring `PluginManagerPage` (`summary` & `page` views) receives `ctx.configForms` and `ctx.locale`. Managed CSS, locale, and slot disposers via `ctx.effect` when available.
+- **Settings Form Input Handling, Localization & ESLint Cleanup (#134)**: Allowed clearing numeric inputs (`astSkeletonMaxDepth`, `autoCompressThreshold`) while editing while normalizing/clamping bounds on save (`1..10` and `>= 0`). Localized `summary`, `loading`, `unavailable`, and `ErrorBoundary` labels (`errorTitle`, `retry`) and removed unused catch bindings.
+- **Regular File Validation & Compressor/Skeletonizer Bounds (#135)**: Added `!stat.isFile()` validation in `context_lens_code` before reading from `filePath` and normalized/clamped `maxDepth` (`>= 0`) and `maxLines` (`>= 1`) across tools, `compressLog`, and `skeletonize`.
+- **Transitive Dependency Security Fixes (#132)**: Updated `package-lock.json` via `npm audit fix` (`zod@4.6.7`, `fast-uri@3.1.9`), reducing `npm audit --omit=dev` to 0 vulnerabilities.
+
+### Documentation
+- **Design Contract & Project Metadata Alignment (#131, #136)**: Updated `docs/design/DESIGN.md` to reflect active slots (`plugins.item`, `plugins.row.config`), active tools (`context_lens_code`, `context_lens_log`), and actual `lib/client.js` bundle size (~26.8 KB / 700 lines), marking #96-removed surfaces as historical. Restored internal project files (`AGENTS.md`, `index.md`, `deploy.sh`) with `.gitattributes` `export-ignore` so neither npm packages nor GitHub mirrors include them.
+
 ## 0.1.35
 
 ### Added

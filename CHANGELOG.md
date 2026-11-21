@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.37
+
+### Fixed
+- **Lossless JSON Compliance in `context_lens_code` (GH #4, #143)**: Omitted `filePath` key when absent instead of setting `filePath: undefined`, resolving `value is not lossless JSON` failures in DSH `0.2.2-rc.5+` tool execution pipeline when using inline snippets.
+- **Repository Line Endings Normalization**: Normalized CRLF line endings to LF across test suites to strictly conform with `.gitattributes` (`* text=auto eol=lf`).
+
 ## 0.1.36
 
 ### Fixed
